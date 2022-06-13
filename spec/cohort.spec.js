@@ -18,8 +18,9 @@ describe("Cohort", () => {
     it("Create a cohort with a cohort name", () => {
         let cohort4
         cohort4 = new Cohort("cohort4");
+        cohortManager.addCohort(cohort4)
         const expected = "cohort4"
-        const result = cohort4.name
+        const result = cohortManager.findCohort("cohort4").name
         expect(result).toEqual(expected);
     });
 
@@ -55,6 +56,16 @@ describe("Cohort", () => {
             email: "smithyJ@gmail.com"
         }]
         const result = cohortManager.addStudent("cohort1", 1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
+        expect(result).toEqual(expected);
+    });
+
+    it("Remove a cohort by cohort name", () => {
+        cohortManager.addCohort(cohort1)
+        cohortManager.addCohort(cohort2)
+        cohortManager.addCohort(cohort3)
+        cohortManager.removeCohort("cohort1")
+        const expected = "cohort2 + cohort3"
+        const result = cohortManager.findCohort("cohort2").name + " + " + cohortManager.findCohort("cohort3").name  
         expect(result).toEqual(expected);
     });
 
