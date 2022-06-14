@@ -49,21 +49,29 @@ describe("Cohort", () => {
             githubUsername: "smithyJ",
             email: "smithyJ@gmail.com"
         }]
-        const result = cohort1.addStudent(1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
+        const result = cohort1.addStudent(1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com").cohort
         expect(result).toEqual(expected);
     });
 
     it("Add student to a specific cohort", () => {
+        cohort1.addStudent(2, "jason", "samoa", "jazzyS", "jazzyS@gmail.com")
         cohortManager.addCohort(cohort1)
         cohortManager.addCohort(cohort2)
         const expected = [{
+            studentId: 2,
+            firstName: "jason",
+            lastName: "samoa",
+            githubUsername: "jazzyS",
+            email: "jazzyS@gmail.com"
+        },
+        {
             studentId: 1,
             firstName: "jacob",
             lastName: "smith",
             githubUsername: "smithyJ",
             email: "smithyJ@gmail.com"
         }]
-        const result = cohortManager.addStudent("cohort1", 1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
+        const result = cohortManager.addStudent(cohort1, "cohort1", 1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com").cohort
         expect(result).toEqual(expected);
     });
 
@@ -72,16 +80,14 @@ describe("Cohort", () => {
         cohortManager.addCohort(cohort2)
         cohortManager.addCohort(cohort3)
         cohortManager.removeCohort("cohort1")
-        const expected = "cohort2 + cohort3"
-        const result = cohortManager.findCohort("cohort2").name + " + " + cohortManager.findCohort("cohort3").name  
+        const expected = "Error 404, this cohort could not be found"
+        const result = cohortManager.findCohort("cohort1")
         expect(result).toEqual(expected);
     });
 
-    it("Remove student from a specific cohort", () => {
-        cohortManager.addCohort(cohort1)
-        cohortManager.addCohort(cohort2)
-        cohortManager.addStudent("cohort1", 1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
-        cohortManager.addStudent("cohort1", 2, "jason", "samoa", "jazzyS", "jazzyS@gmail.com")
+    it("Remove a student from a cohort by their id", () => {
+        cohort1.addStudent(1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
+        cohort1.addStudent(2, "jason", "samoa", "jazzyS", "jazzyS@gmail.com")
         const expected = [{
             studentId: 2,
             firstName: "jason",
@@ -89,17 +95,24 @@ describe("Cohort", () => {
             githubUsername: "jazzyS",
             email: "jazzyS@gmail.com"
         }]
-        const result = cohortManager.removeStudent("cohort1", 1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
+        const result = cohort1.removeStudentById(1).cohort
         expect(result).toEqual(expected);
     });
 
-    it("Error message if student cannot be found", () => {
+    it("Remove student from a specific cohort", () => {
         cohortManager.addCohort(cohort1)
         cohortManager.addCohort(cohort2)
-        cohortManager.addStudent("cohort1", 1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
-        cohortManager.addStudent("cohort1", 2, "jason", "samoa", "jazzyS", "jazzyS@gmail.com")
-        const expected = "Error 404, this student could not be found"
-        const result = cohortManager.removeStudent("cohort1", 1, "jill", "smith", "smithyJ", "smithyJ@gmail.com")
+        cohortManager.addStudent(cohort1, "cohort1", 1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
+        cohortManager.addStudent(cohort1, "cohort1", 2, "jason", "samoa", "jazzyS", "jazzyS@gmail.com")
+        cohortManager.removeStudent(cohort1, "cohort1", 1)
+        const expected = [{
+            studentId: 2,
+            firstName: "jason",
+            lastName: "samoa",
+            githubUsername: "jazzyS",
+            email: "jazzyS@gmail.com"
+        }]
+        const result = cohortManager.findCohort("cohort1").cohort
         expect(result).toEqual(expected);
     });
 

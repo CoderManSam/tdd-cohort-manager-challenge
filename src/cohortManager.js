@@ -1,4 +1,4 @@
-// const Cohort = require('../src/cohort.js')
+const Cohort = require('../src/cohort.js')
 
 class CohortManager {
   constructor() {
@@ -21,6 +21,26 @@ class CohortManager {
     return this.cohorts.find((element) => element.name === cohortName)
   }
 
+  addStudent(cohort, cohortName, id, firstName, surname, github, emailAddress) {
+    const cohortWithNewStudent = cohort.addStudent(
+      id,
+      firstName,
+      surname,
+      github,
+      emailAddress
+    )
+
+    const arrayWithoutTheCohortStudentIsBeingAddedTo = this.cohorts.filter(
+      (element) => element.name !== cohortName
+    )
+
+    arrayWithoutTheCohortStudentIsBeingAddedTo.push(cohortWithNewStudent)
+
+    this.cohorts = arrayWithoutTheCohortStudentIsBeingAddedTo
+
+    return this.findCohort(cohortName)
+  }
+
   removeCohort(cohortName) {
     if (
       this.cohorts.find((element) => element.name === cohortName) === undefined
@@ -28,88 +48,36 @@ class CohortManager {
       return 'Error 404, this cohort could not be found'
     }
 
-    this.cohorts = this.cohorts.filter((element) => element.name !== cohortName)
+    return (this.cohorts = this.cohorts.filter(
+      (element) => element.name !== cohortName
+    ))
+  }
+
+  removeStudent(cohort, cohortName, id) {
+    if (
+      cohort === undefined ||
+      this.cohorts.find((element) => element.name === cohortName) === undefined
+    ) {
+      return 'Error 404, this cohort could not be found'
+    }
+
+    const cohortWithStudentRemoved = cohort.removeStudentById(id)
+
+    const cohortsWithoutCohortStudentWasRemovedFrom = this.cohorts.filter(
+      (element) => element.name !== cohortName
+    )
+
+    this.cohorts = cohortsWithoutCohortStudentWasRemovedFrom
+
+    this.cohorts.push(cohortWithStudentRemoved)
 
     return this.cohorts
   }
-
-  addStudent(cohortName, id, firstName, surname, github, emailAddress) {
-    const student = {
-      studentId: id,
-      firstName: firstName,
-      lastName: surname,
-      githubUsername: github,
-      email: emailAddress
-    }
-
-    if (
-      this.cohorts.find((element) => element.name === cohortName) === undefined
-    ) {
-      return 'Error 404, this cohort could not be found'
-    }
-
-    const cohortToAddTo = this.findCohort(cohortName).cohort
-
-    cohortToAddTo.push(student)
-
-    return cohortToAddTo
-  }
-
-  // studentSearchById() {
-
-  // }
-
-  // allStudentsMatchingName() {
-
-  // }
-
-  // The below can search all students matching name then filter by cohortname to ensure the right one
-
-  removeStudent(cohortName, id, firstName, surname) {
-    if (
-      this.cohorts.find((element) => element.name === cohortName) === undefined
-    ) {
-      return 'Error 404, this cohort could not be found'
-    }
-
-    let cohortToRemoveFrom = this.findCohort(cohortName).cohort
-
-    if (
-      cohortToRemoveFrom.find((element) => element.studentId === id) ===
-        undefined ||
-      cohortToRemoveFrom.find((element) => element.firstName === firstName) ===
-        undefined ||
-      cohortToRemoveFrom.find((element) => element.lastName === surname) ===
-        undefined
-    ) {
-      return 'Error 404, this student could not be found'
-    }
-
-    cohortToRemoveFrom = cohortToRemoveFrom.filter(
-      (element) =>
-        element.studentId !== id &&
-        element.firstName !== firstName &&
-        element.lastName !== surname
-    )
-
-    return cohortToRemoveFrom
-  }
-
-  // studentSearchById(id) {
-  //   let studentsCohort = {}
-
-  //   for (let i = 0; i < this.cohorts.length; i++) {
-  //     studentsCohort = this.cohorts[i].cohort.find((element) => element.studentId === id)
-  //   }
-
-  //   return studentsCohort
-  // }
 }
 
-// let cohort1
-// cohort1 = new Cohort('cohort1');
-// let cohortManager
-// cohortManager = new CohortManager();
-// console.log(cohortManager.addCohort(cohort1))
+let cohort1
+cohort1 = new Cohort('cohort1')
+cohort1 = 0
+console.log(cohort1)
 
 module.exports = CohortManager

@@ -14,14 +14,34 @@ class Cohort {
       email: emailAddress
     }
 
+    if (this.cohort.length === this.capacity) {
+      return 'error, cohort is full, unable to add this student to the cohort'
+    }
+
     this.cohort.push(student)
 
-    return this.cohort
+    return this
+  }
+
+  studentSearchById(id) {
+    const searchById = this.cohort.find((element) => element.studentId === id)
+
+    if (searchById === undefined) {
+      return 'error 404, this student could not be found'
+    }
+
+    return searchById
+  }
+
+  removeStudentById(id) {
+    if (this.cohort.find((element) => element.studentId === id) === undefined) {
+      return 'error 404, this student could not be found'
+    }
+
+    this.cohort = this.cohort.filter((element) => element.studentId !== id)
+
+    return this
   }
 }
-
-// console.log(new Cohort(cohort1));
-// console.log(new Cohort(cohort2));
-// console.log(new Cohort(cohort3));
 
 module.exports = Cohort
