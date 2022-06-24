@@ -5,6 +5,10 @@ class Cohort {
     this.capacity = 24
   }
 
+  getCohort() {
+    return this.cohort
+  }
+
   addStudent(id, firstName, surname, github, emailAddress) {
     const student = {
       studentId: id,

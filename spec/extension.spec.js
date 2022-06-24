@@ -72,4 +72,41 @@ describe("Cohort", () => {
         expect(result).toEqual(expected);
     });
 
+    it("Search for students by name (first and last) and return all matching results", () => {
+        cohort1.addStudent(1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
+        cohort1.addStudent(2, "jason", "samoa", "jazzyS", "jazzyS@gmail.com")
+        cohort1.addStudent(3, "jill", "starling", "Jstar", "Jstar@gmail.com")
+        cohortManager.addCohort(cohort1)
+        cohort2.addStudent(4, "jacob", "smith", "smithy", "smithy@gmail.com")
+        cohortManager.addCohort(cohort2)
+        const expected = [
+            {studentId: 1, firstName: "jacob", lastName: "smith", githubUsername: "smithyJ", email: "smithyJ@gmail.com"}, 
+            {studentId: 4, firstName: "jacob", lastName: "smith", githubUsername: "smithy", email: "smithy@gmail.com"}]
+        const result = cohortManager.studentSearchByName("jacob", "smith")
+        expect(result).toEqual(expected);
+    });
+
+    it("Cohorts can't have the same name, and can't exist without a name", () => {
+        cohortManager.addCohort(cohort1)
+        cohortManager.addCohort(cohort2)
+        cohortManager.addCohort(cohort3)
+        const expected = "error, this cohort cannot be added as a cohort already exists with this name"
+        const result = cohortManager.addCohort(cohort3)
+        expect(result).toEqual(expected);
+    });
+
+    // method this test is testing is currently incomplete and has been removed from the specs being tested
+    xit("The same student can't exist in multiple cohorts.", () => {
+        cohort1.addStudent(1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
+        cohort1.addStudent(2, "jason", "samoa", "jazzyS", "jazzyS@gmail.com")
+        cohort1.addStudent(3, "jill", "starling", "Jstar", "Jstar@gmail.com")
+        cohortManager.addCohort(cohort1)
+        cohort2.addStudent(1, "jacob", "smith", "smithyJ", "smithyJ@gmail.com")
+        const expected = "error, this cohort cannot be added as a cohort already exists with this name"
+        const result = cohortManager.studentInAnotherCohortCheck(cohort2)
+
+        console.log("current test result is: ", result)
+        expect(result).toEqual(expected);
+    });
+
 })    

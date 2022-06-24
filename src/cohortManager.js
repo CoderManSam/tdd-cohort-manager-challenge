@@ -6,10 +6,54 @@ class CohortManager {
   }
 
   addCohort(cohortName) {
+    // return this.studentInAnotherCohortCheck(cohortName)
+
+    for (let i = 0; i < this.cohorts.length; i++) {
+      if (cohortName.name === this.cohorts[i].name) {
+        return 'error, this cohort cannot be added as a cohort already exists with this name'
+      }
+    }
+
     this.cohorts.push(cohortName)
 
     return this.cohorts
   }
+
+  // METHOD IS INCOMPLETE AND HAS THEREFORE BEEN COMMENTED OUT
+  // studentInAnotherCohortCheck(cohortName) {
+
+  //   let cohortCheck = true
+
+  //   const cohortToAdd = cohortName.getCohort()
+
+  //   for(let j = 0; j < cohortToAdd.length; j++) {
+
+  //     const student = {
+  //       studentId: cohortToAdd[j].studentId,
+  //       firstName: cohortToAdd[j].firstName,
+  //       lastName: cohortToAdd[j].lastName,
+  //       githubUsername: cohortToAdd[j].githubUsername,
+  //       email: cohortToAdd[j].email
+  //     }
+
+  //     for(let i = 0; i < this.cohorts.length; i++) {
+
+  //       const cohort = this.cohorts[i].getCohort()
+
+  //       cohortCheck = cohort.find(((element) => element.firstName === student.studentId) &&
+  //                                       ((element) => element.lastName === student.firstName) &&
+  //                                       ((element) => element.lastName === student.lastName) &&
+  //                                       ((element) => element.lastName === student.githubUsername) &&
+  //                                       ((element) => element.lastName === student.email))
+
+  //                                       console.log("student is : ", student)
+  //     }
+
+  //   }
+
+  //   return cohortCheck
+
+  // }
 
   findCohort(cohortName) {
     if (
@@ -72,6 +116,23 @@ class CohortManager {
     this.cohorts.push(cohortWithStudentRemoved)
 
     return this.cohorts
+  }
+
+  studentSearchByName(firstName, lastName) {
+    const result = []
+
+    for (let i = 0; i < this.cohorts.length; i++) {
+      const cohort = this.cohorts[i].getCohort()
+
+      const filteredCohort = cohort.filter(
+        ((element) => element.firstName === firstName) &&
+          ((element) => element.lastName === lastName)
+      )
+
+      result.push(filteredCohort[0])
+    }
+
+    return result
   }
 }
 
